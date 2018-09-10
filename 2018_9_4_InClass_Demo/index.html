@@ -1,0 +1,45 @@
+<html>
+
+<head>
+  <title>HELLO</title>
+  <style>
+    #one {
+      color: blue;
+      background-color: yellow;
+    }
+
+    .fun {
+      border: coral 1px solid;
+    }
+
+    div {
+      font-size: 20px;
+    }
+  </style>
+
+  <script type="text/javascript">
+    //run init script when the window finishes loading
+    window.addEventListener("load", init);
+
+    function init() {
+
+      let div1 = document.getElementById("one");
+      console.log(div1);
+      div1.style.color = "green";
+      div1.addEventListener("click", function() {
+        console.log("clicked!");
+      });
+    }
+  </script>
+</head>
+
+<body>
+  this is some content
+
+  <div id="one" class="fun">stuff in this div</div>
+  <div id="two" class="fun">stuff in another div</div>
+
+
+</body>
+
+</html>
