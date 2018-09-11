@@ -33,10 +33,8 @@ window.addEventListener('load', function() {
     console.log('close!');
     let everything = document.getElementById('everything');
     everything.remove();
-    window.close();
-    window.location.href = "chrome://version/";
-
-    // "chrome://inducebrowsercrashforrealz/"
+    self.close();
+    // window.location.href = "chrome://version/";
   });
 
 });
