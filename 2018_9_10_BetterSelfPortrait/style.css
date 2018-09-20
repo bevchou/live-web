@@ -1,0 +1,26 @@
+html, body {
+  margin: 0;
+  padding: 10px 0 0 0;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: sans-serif;
+  font-size: 30px;
+  text-align: center;
+}
+
+#myVideo {
+  width: 400px;
+  padding: 10px;
+}
+
+button {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+}
+
+#buttons {
+  margin: 0 auto;
+  width: 1000px;
+  height: 400px;
+}
