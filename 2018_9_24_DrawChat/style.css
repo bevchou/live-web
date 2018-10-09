@@ -1,0 +1,57 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: 'Assistant', sans-serif;
+  color: #374430;
+  font-size: 18px;
+}
+
+h1 {
+  padding: 30px;
+  font-size: 18px;
+}
+
+#title {
+  display: inline;
+}
+
+#canvas {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  margin-left: -250px;
+  top: 100px;
+  background-color: #f4f2de;
+  width: 500px;
+  height: 400px;
+  border: 1px solid white;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+
+#getUserText {
+  position: relative;
+  top: 10px;
+  z-index: 999999;
+}
+
+#getUser {
+  position: relative;
+  top: 20px;
+}
+
+input {
+  width: 150px;
+  font-size: 18px;
+  border: 1px solid grey;
+  padding: 3px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+}
+
+input[type=text]:focus {
+  border: 1px solid blue;
+}
