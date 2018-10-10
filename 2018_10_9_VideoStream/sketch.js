@@ -5,9 +5,12 @@ socket.on('connect', function() {
 });
 
 // Receive from any event
-socket.on('dataURL', function(data) {
+socket.on('webcamImg', function(dataURL) {
   console.log("get video frame data");
-
+  let newImg = document.createElement('img');
+  newImg.src = dataURL;
+  let chat = document.getElementById('chatBody');
+  chat.insertBefore(newImg, chat.childNodes[0]);
 });
 
 // function
@@ -29,6 +32,7 @@ window.addEventListener('load', function() {
   //get elements
   let video = document.getElementById('myVideo');
   let canvas = document.getElementById('myCanvas');
+  let sendPic = document.getElementById('sendPic');
 
   // what media we want
   let constraints = {
@@ -44,7 +48,6 @@ window.addEventListener('load', function() {
       video.onloadedmetadata = function(e) {
         //play video
         video.play();
-        drawToCanvas();
       };
     })
     // if error, send to console
@@ -65,8 +68,9 @@ window.addEventListener('load', function() {
     }
   }, false);
 
-
-  function drawToCanvas() {
+  //when you click on send button
+  sendPic.addEventListener('click', function() {
+    //get canvas context
     let context = canvas.getContext('2d');
     //when the width and height are available
     //draw the image to the canvas
@@ -75,7 +79,9 @@ window.addEventListener('load', function() {
       canvas.height = height;
       context.drawImage(video, 0, 0, width, height);
     }
-    //run every 3 seconds
-    setTimeout(drawToCanvas, 2000);
-  }
+    //get the data URL & send to other clients
+    let imgDataURL = canvas.toDataURL();
+    socket.emit('webcamImg',imgDataURL);
+  });
+
 });

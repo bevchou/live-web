@@ -38,9 +38,9 @@ io.sockets.on('connection', function(socket) {
   console.log("We have a new client: " + socket.id);
 
   // whens someone sends a video frame
-  socket.on('dataURL', function(data) {
+  socket.on('webcamImg', function(data) {
     // Send it to all of the clients
-    io.sockets.emit('dataURL', data);
+    io.sockets.emit('webcamImg', data);
   });
 
 
