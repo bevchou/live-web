@@ -1,4 +1,4 @@
-var express = require ('express');
+var express = require('express');
 var socket = require('socket.io');
 
 var app = express();
@@ -11,19 +11,26 @@ console.log("server running");
 
 var io = socket(server);
 
-io.on('connection',newConnection);
+io.on('connection', newConnection);
 
 function newConnection(socket) {
-	//console.log(socket);
-	console.log('new connection:' + socket.id);
+  //console.log(socket);
+  console.log('new connection:' + socket.id);
 
 
-	socket.on('mouse', mouseMsg);
+  // socket.on('mouse', mouseMsg);
+  //
+  // function mouseMsg(data){
+  // 	socket.broadcast.emit('mouse', data);
+  // 	//io.sockets.emit('mouse',data);
+  // 	console.log(data);
+  // }
 
-	function mouseMsg(data){
-		socket.broadcast.emit('mouse', data);
-		//io.sockets.emit('mouse',data);
+
+  socket.on('mouse', function(data) {
 		console.log(data);
-	}
+    socket.broadcast.emit('mouse', data);
+  });
+
 
 }
