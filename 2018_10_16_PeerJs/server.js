@@ -3,8 +3,8 @@ var https = require('https');
 var fs = require('fs');
 
 var options = {
-  key: fs.readFileSync('/itp_io_cert/my-key.pem'),
-  cert: fs.readFileSync('/itp_io_cert/my-cert.pem')
+  key: fs.readFileSync('/root/itp_io_cert/my-key.pem'),
+  cert: fs.readFileSync('/root/itp_io_cert/my-cert.pem')
 };
 
 var httpServer = https.createServer(options, requestHandler);

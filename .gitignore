@@ -1,2 +1,4 @@
 notForGithub/
 itp_io_cert/
+**/my-cert.pem
+**/my-key.pem

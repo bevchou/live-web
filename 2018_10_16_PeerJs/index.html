@@ -4,7 +4,7 @@
   <title>Beverly Chou - PeerJS</title>
 
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-  <script src="peer.js"></script>
+  <script src="peer.min.js"></script>
   <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="style.css">
   <script type="text/javascript" src="sketch.js"></script>
@@ -13,19 +13,10 @@
 
 <body>
 
-  <div id="chatBody">
-  </div>
-
-
-  <video id="myVideo"></video>
-  <button id="sendPic">send</button>
-
-
-  <!-- height="400" width="600" -->
-
-  <canvas id="myCanvas"></canvas>
-
-
+  <video id="myVideo" playsinline controls="true" autoplay></video>
+  <input id="idToCall"></input>
+  <button id="callButton">call</button>
+  <p>is this loading or not</p>
 </body>
 
 </html>

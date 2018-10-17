@@ -1,29 +1,12 @@
-//connect client to websocket
-var socket = io.connect();
-socket.on('connect', function() {
-  console.log("Connected");
-});
-
-// Receive from any event
-socket.on('webcamImg', function(dataURL) {
-  console.log("get video frame data");
-  let newImg = document.createElement('img');
-  newImg.src = dataURL;
-  let chat = document.getElementById('chatBody');
-  chat.insertBefore(newImg, chat.childNodes[0]);
-});
-
-// function
-// var sendmessage = function(message) {
-//   console.log("colorMessage: " + message);
-//   socket.emit('colorMessage', message);
-// };
-
-
 //GLOBAL VARIABLES
 let width = 300;
 let height = 0;
 let streaming = false;
+
+var socket = null;
+var my_stream = null;
+var peer_id = null;
+var peer = null;
 
 
 // run code once the window loads
@@ -31,8 +14,7 @@ window.addEventListener('load', function() {
 
   //get elements
   let video = document.getElementById('myVideo');
-  let canvas = document.getElementById('myCanvas');
-  let sendPic = document.getElementById('sendPic');
+  let callButton = document.getElementById('callButton');
 
   // what media we want
   let constraints = {
@@ -44,10 +26,13 @@ window.addEventListener('load', function() {
   navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
       // attach stream to video object
       video.srcObject = stream;
+      my_stream = stream;
       // wait for stream to load enough to play
       video.onloadedmetadata = function(e) {
         //play video
         video.play();
+        //connect users
+        connectPeer();
       };
     })
     // if error, send to console
@@ -62,26 +47,79 @@ window.addEventListener('load', function() {
       height = video.videoHeight / (video.videoWidth / width);
       video.setAttribute('width', width);
       video.setAttribute('height', height);
-      canvas.setAttribute('width', width);
-      canvas.setAttribute('height', height);
       streaming = true;
     }
   }, false);
 
-  //when you click on send button
-  sendPic.addEventListener('click', function() {
-    //get canvas context
-    let context = canvas.getContext('2d');
-    //when the width and height are available
-    //draw the image to the canvas
-    if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      context.drawImage(video, 0, 0, width, height);
+  function connectPeer() {
+    peer = new Peer({
+      host: 'liveweb-new.itp.io',
+      port: 9000,
+      path: '/'
+    });
+
+    // Get an ID from the PeerJS server
+    peer.on('open', function(id) {
+      console.log('My peer ID is: ' + id);
+      peer_id = id;
+
+      socket = io.connect();
+
+      socket.on('connect', function() {
+        console.log("connect");
+        socket.emit('peerid', peer_id);
+      });
+
+      socket.on('peerid', function(data) {
+        makeCall(data);
+      });
+    });
+
+    peer.on('error', function(err) {
+      console.log(err);
+    });
+
+    peer.on('call', function(incoming_call) {
+      console.log("Got a call!");
+      console.log(incoming_call);
+      incoming_call.answer(my_stream); // Answer the call with our stream from getUserMedia
+      incoming_call.on('stream', function(remoteStream) { // we receive a getUserMedia stream from the remote caller
+        // And attach it to a video object
+        var ovideoElement = document.createElement('video');
+        ovideoElement.src = window.URL.createObjectURL(remoteStream) || remoteStream;
+        ovideoElement.autoplay = true;
+        ovideoElement.controls = true;
+        ovideoElement.playsInline = true;
+        ovideoElement.play();
+        document.body.appendChild(ovideoElement);
+
+      });
+    });
+
+    callButton.addEventListener('click', function() {
+      let idToCall = document.getElementById('idToCall').value;
+      makeCall(idToCall);
+    });
+
+    function makeCall(idToCall) {
+      //var idToCall = document.getElementById('tocall').value;
+      console.log("peer: " + peer);
+      var call = peer.call(idToCall, my_stream);
+      console.log("made a call: " + call);
+
+      call.on('stream', function(remoteStream) {
+        console.log("Got remote stream");
+        var ovideoElement = document.createElement('video');
+        ovideoElement.src = window.URL.createObjectURL(remoteStream) || remoteStream;
+        ovideoElement.autoplay = true;
+        ovideoElement.controls = true;
+        ovideoElement.playsInline = true;
+        ovideoElement.play();
+        document.body.appendChild(ovideoElement);
+      });
     }
-    //get the data URL & send to other clients
-    let imgDataURL = canvas.toDataURL();
-    socket.emit('webcamImg',imgDataURL);
-  });
+
+
+  }
 
 });
