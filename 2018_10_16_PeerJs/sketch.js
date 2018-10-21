@@ -1,3 +1,8 @@
+//some deets about getting videos to play on apple devices
+// https://webkit.org/blog/6784/new-video-policies-for-ios/
+// https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/
+
+
 //GLOBAL VARIABLES
 let width = 300;
 let height = 0;
