@@ -59,17 +59,21 @@ io.sockets.on('connection', function(socket) {
     let binaryImage = new Buffer(strippedImage, 'base64');
     //write file
     fs.writeFileSync(__dirname + "/imgs/" + data.filename, binaryImage);
+    //create object for database
     let objectToDb = {
       filename: __dirname + data.filename,
       hour: data.hour,
       minute: data.minute,
       second: data.second
     };
-    //store info to database
+    //store object to database
     db.insert(objectToDb, function(err, newDocs) {
-      console.log("err:" + err);
-      console.log("newDocs: " + newDocs);
+      if (err != null) {
+        console.log("err:" + err);
+        console.log("newDocs: " + newDocs);
+      }
     });
+
   });
 
 

@@ -8,25 +8,28 @@ html, body {
   background-color: #ededed;
 }
 
-#captureImg {
+button {
   background-color: #9fbbce;
   color: #3d4c56;
-  top: 120px;
-  width: 60px;
-  height: 30px;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   font-size: 14px;
 }
 
+#captureImg {
+  top: 120px;
+  width: 80px;
+  height: 30px;
+}
+
 #myCanvas {
-  display: none;
+  /* display: none; */
 }
 
 #myVideo {
-	margin-top: 50px;
-	background-color: none;
+  margin-top: 50px;
+  background-color: none;
   z-index: 9999;
   top: 100px;
 }
