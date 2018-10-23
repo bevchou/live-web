@@ -9,13 +9,17 @@ html, body {
 }
 
 button {
+  position: absolute;
+  right: 0;
+  margin: 30px;
   background-color: #9fbbce;
   color: #3d4c56;
-  height: 30px;
+  height: 80px;
+  width: 80px;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 #captureImg {
@@ -28,10 +32,16 @@ button {
 }
 
 #myVideo {
-  margin-top: 50px;
-  background-color: none;
-  z-index: 9999;
-  top: 100px;
+  position: absolute;
+  margin: 30px;
+  z-index: 10;
+  left: 0;
 }
 
-#mainImg {}
+#showImg {
+  position: absolute;
+  margin: 30px;
+  z-index: 100;
+  width: 600px;
+  left: 0;
+}

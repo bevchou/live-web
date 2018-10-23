@@ -44,22 +44,6 @@ var io = require('socket.io').listen(httpServer);
 io.sockets.on('connection', function(socket) {
   console.log("We have a new client: " + socket.id);
 
-
-
-
-  //get photo taken at specified time from the database & send back to the client
-  socket.on('timeUpdate', function(data) {
-    db.findOne({
-      totalSeconds: data
-    }, function(err, docs) {
-      // console.log(docs);
-      if (docs != null) {
-        //if there's something, send it to client
-        socket.emit('theImg', docs);
-      }
-    });
-  });
-
   // whens someone sends a video frame
   socket.on('webcamImg', function(data) {
     // Send it to all of the clients
@@ -108,7 +92,7 @@ io.sockets.on('connection', function(socket) {
   });
 });
 
-
+//get a random integer between min & max
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }

@@ -7,6 +7,8 @@ socket.on('connect', function() {
 socket.on('returnImg', function(data) {
   console.log(data);
   showImg.src = data.filename;
+  showImg.style.visibility = "visible";
+  video.style.visibility = "hidden";
 });
 
 //GLOBAL VARIABLES
@@ -16,10 +18,13 @@ let streaming = false;
 let frontCam = true;
 let isMobile = /android.+mobile|ip(hone|[oa]d)/i.test(navigator.userAgent);
 let time;
+let videoMode = true;
 
 
 // run code once the window loads
 window.addEventListener('load', function() {
+
+
 
   //get elements
   let video = document.getElementById('myVideo');
@@ -28,11 +33,10 @@ window.addEventListener('load', function() {
   let flipButton = document.getElementById('flipButton');
   let showImg = document.getElementById('showImg');
 
-  //check if there is an image at the current time
-  //by querying the database every second
-  function checkImgDb() {
-    socket.emit('timeUpdate', timeInSec);
-  }
+
+  //hide image
+  //show video
+  setCameraMode();
 
   // what media we want
   let constraints = {
@@ -56,9 +60,9 @@ window.addEventListener('load', function() {
     }
   }, false);
 
+
   //if user is on a mobile device
   //give them the option to flip the camera
-
   if (isMobile) {
     //flip camera mode
     flipButton.addEventListener('click', function() {
@@ -86,42 +90,50 @@ window.addEventListener('load', function() {
     });
   } else {
     //hide the button if not running on mobile device
-    flipButton.style.visibility = "hidden"
+    flipButton.style.visibility = "hidden";
   }
 
 
   //when you click on send button
   captureImg.addEventListener('click', function() {
-    //get canvas context
-    let context = canvas.getContext('2d');
-    //when the width and height are available
-    //draw the image to the canvas
-    if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      context.drawImage(video, 0, 0, width, height);
+    if (videoMode) {
+      //get canvas context
+      let context = canvas.getContext('2d');
+      //when the width and height are available
+      //draw the image to the canvas
+      if (width && height) {
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(video, 0, 0, width, height);
+      }
+      //get the data URL & send to other clients
+      let imgDataURL = canvas.toDataURL();
+      let currentDate = new Date();
+      let currentTime = currentDate.getTime();
+      let totSecs = getTotalSeconds(currentDate);
+      //create object to send
+      let imgObject = {
+        filename: "img_" + currentTime + ".jpg",
+        dataURL: imgDataURL,
+        epochTime: currentTime,
+        hour: currentDate.getHours(),
+        minute: currentDate.getMinutes(),
+        second: currentDate.getSeconds(),
+        totalSeconds: totSecs
+      };
+      // console.log(imgObject);
+      //send object
+      socket.emit('webcamImg', imgObject);
+      setImgMode();
+    } else {
+      setCameraMode();
     }
-    //get the data URL & send to other clients
-    let imgDataURL = canvas.toDataURL();
-    let currentDate = new Date();
-    let currentTime = currentDate.getTime();
-    let totSecs = getTotalSeconds(currentDate);
-    //create object to send
-    let imgObject = {
-      filename: "img_" + currentTime + ".jpg",
-      dataURL: imgDataURL,
-      epochTime: currentTime,
-      hour: currentDate.getHours(),
-      minute: currentDate.getMinutes(),
-      second: currentDate.getSeconds(),
-      totalSeconds: totSecs
-    };
-    // console.log(imgObject);
-    //send object
-    socket.emit('webcamImg', imgObject);
 
   });
 
+
+
+  //function to start the getting the video feed
   function runStream() {
     //reset video stream
     video.pause();
@@ -140,6 +152,20 @@ window.addEventListener('load', function() {
       .catch(function(err) {
         console.log(err);
       });
+  }
+
+  function setCameraMode() {
+    captureImg.innerHTML = "capture";
+    showImg.style.visibility = "hidden";
+    video.style.visibility = "visible";
+    flipButton.style.visibility = "visible";
+    videoMode = true;
+  }
+
+  function setImgMode() {
+    flipButton.style.visibility = "hidden";
+    captureImg.innerHTML = "done";
+    videoMode = false;
   }
 
 });
