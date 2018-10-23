@@ -14,21 +14,24 @@ https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="style.css">
   <script type="text/javascript" src="sketch.js"></script>
+  <script type="text/javascript" src="helpers.js"></script>
 
 </head>
 
 <body>
 
+  <img src="" id="mainImg">
+
   <video playsinline controls="true" autoplay id="myVideo"></video>
-	<br>
+  <br>
   <button id="captureImg">capture</button>
-
-
-  <!-- height="400" width="600" -->
-
-  <canvas id="myCanvas"></canvas>
   <button id="flipButton">flip cam</button>
+  <canvas id="myCanvas"></canvas>
+  <!-- <canvas id="overlayCanvas"></canvas> -->
+  <br>
+  <input type="range" min="0" max="86400" value="43200" id="slider">
 
+  <div id="showTime"></div>
 
 </body>
 

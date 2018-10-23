@@ -36,9 +36,6 @@ var db = new Datastore({
   autoload: true
 });
 
-db.find({}, function(err, docs) {
-  console.log(docs);
-});
 
 // WebSockets work with the HTTP server
 var io = require('socket.io').listen(httpServer);
@@ -46,6 +43,23 @@ var io = require('socket.io').listen(httpServer);
 // when client connects
 io.sockets.on('connection', function(socket) {
   console.log("We have a new client: " + socket.id);
+
+
+  //get all of the database
+  db.find({}, function(err, docs) {
+    socket.emit('currentData', docs);
+  });
+
+
+  socket.on('timeUpdate', function(data) {
+    db.findOne({
+      totalSeconds: data
+    }, function(err, docs) {
+      if (err != null) {
+        socket.emit('theImg', docs);
+      }
+    });
+  });
 
   // whens someone sends a video frame
   socket.on('webcamImg', function(data) {
@@ -61,10 +75,11 @@ io.sockets.on('connection', function(socket) {
     fs.writeFileSync(__dirname + "/imgs/" + data.filename, binaryImage);
     //create object for database
     let objectToDb = {
-      filename: __dirname + data.filename,
+      filename: __dirname + "/imgs/" + data.filename,
       hour: data.hour,
       minute: data.minute,
-      second: data.second
+      second: data.second,
+      totalSeconds: data.totalSeconds
     };
     //store object to database
     db.insert(objectToDb, function(err, newDocs) {

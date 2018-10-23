@@ -24,7 +24,7 @@ button {
 }
 
 #myCanvas {
-  /* display: none; */
+  display: none;
 }
 
 #myVideo {
@@ -32,4 +32,8 @@ button {
   background-color: none;
   z-index: 9999;
   top: 100px;
+}
+
+#slider {
+  width: 200px;
 }

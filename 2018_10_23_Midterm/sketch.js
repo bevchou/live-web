@@ -13,22 +13,25 @@ socket.on('webcamImg', function(dataURL) {
   chat.insertBefore(newImg, chat.childNodes[0]);
 });
 
-// function
-// var sendmessage = function(message) {
-//   console.log("colorMessage: " + message);
-//   socket.emit('colorMessage', message);
-// };
+socket.on('currentData', function(data) {
+  console.log(data);
 
+});
 
+socket.on('theImg', function(data) {
+  console.log(data);
+  mainImg.src = data;
+});
 
 
 
 //GLOBAL VARIABLES
-let width = 600;
-let height = 0;
+let width = 400;
+let height = 300;
 let streaming = false;
 let frontCam = true;
 let isMobile = /android.+mobile|ip(hone|[oa]d)/i.test(navigator.userAgent);
+let time;
 
 
 // run code once the window loads
@@ -39,6 +42,20 @@ window.addEventListener('load', function() {
   let canvas = document.getElementById('myCanvas');
   let captureImg = document.getElementById('captureImg');
   let flipButton = document.getElementById('flipButton');
+  let showTime = document.getElementById('showTime');
+  let mainImg = document.getElementById('mainImg');
+  let slider = document.getElementById('slider');
+
+  function checkImgDb() {
+    time = new Date();
+    timeInSec = getTotalSeconds(time);
+    showTime.innerHTML = timeInSec;
+    socket.emit('timeUpdate', timeInSec);
+    // let newFilepath = "/imgs/img_" + timeInSec + ".jpg";
+    // console.log(newFilepath);
+    // mainImg.src = newFilepath;
+  }
+  setInterval(checkImgDb, 1000);
 
   // what media we want
   let constraints = {
@@ -63,6 +80,7 @@ window.addEventListener('load', function() {
 
   //if user is on a mobile device
   //give them the option to flip the camera
+
   if (isMobile) {
     //flip camera mode
     flipButton.addEventListener('click', function() {
@@ -108,14 +126,15 @@ window.addEventListener('load', function() {
     //get the data URL & send to other clients
     let imgDataURL = canvas.toDataURL();
     let currentTime = new Date();
-    let currentEpochTime = new Date().getTime();
+    let totSecs = getTotalSeconds(currentTime);
     //create object to send
     let imgObject = {
-      filename: "img_" + currentEpochTime + ".jpg",
+      filename: "img_" + totSecs + ".jpg",
       dataURL: imgDataURL,
       hour: currentTime.getHours(),
       minute: currentTime.getMinutes(),
-      second: currentTime.getSeconds()
+      second: currentTime.getSeconds(),
+      totalSeconds: totSecs
     };
     console.log(imgObject);
     //send object
