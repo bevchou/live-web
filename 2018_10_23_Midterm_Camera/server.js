@@ -9,7 +9,7 @@ var options = {
 
 var httpServer = https.createServer(options, requestHandler);
 var url = require('url');
-httpServer.listen(8080);
+httpServer.listen(8001);
 
 function requestHandler(req, res) {
   var parsedUrl = url.parse(req.url);
@@ -45,10 +45,7 @@ io.sockets.on('connection', function(socket) {
   console.log("We have a new client: " + socket.id);
 
 
-  //get all of the database
-  db.find({}, function(err, docs) {
-    socket.emit('currentData', docs);
-  });
+
 
   //get photo taken at specified time from the database & send back to the client
   socket.on('timeUpdate', function(data) {
@@ -56,7 +53,7 @@ io.sockets.on('connection', function(socket) {
       totalSeconds: data
     }, function(err, docs) {
       // console.log(docs);
-      if (err != null) {
+      if (docs != null) {
         //if there's something, send it to client
         socket.emit('theImg', docs);
       }
@@ -67,7 +64,7 @@ io.sockets.on('connection', function(socket) {
   socket.on('webcamImg', function(data) {
     // Send it to all of the clients
     // io.sockets.emit('webcamImg', data);
-    console.log('got img');
+    console.log('got img: ' + data.filename);
     let dataURL = data.dataURL;
     //convert data URL to img
     let searchFor = "data:image/jpeg;base64,";
@@ -77,7 +74,8 @@ io.sockets.on('connection', function(socket) {
     fs.writeFileSync(__dirname + "/imgs/" + data.filename, binaryImage);
     //create object for database
     let objectToDb = {
-      filename: __dirname + "/imgs/" + data.filename,
+      filename: "/imgs/" + data.filename,
+      epochTime: data.epochTime,
       hour: data.hour,
       minute: data.minute,
       second: data.second,
@@ -91,6 +89,17 @@ io.sockets.on('connection', function(socket) {
       }
     });
 
+    //get a new photo from the database
+    //get all of the database
+    db.find({}, function(err, docs) {
+      //find the total number of images & pick one at random
+      let totalImgs = docs.length;
+      let index = getRndInteger(0, totalImgs - 1);
+      //send the file path of random img to client
+      console.log("sending img: " + docs[index].filename);
+      socket.emit('returnImg', docs[index]);
+    });
+
   });
 
 
@@ -98,3 +107,8 @@ io.sockets.on('connection', function(socket) {
     console.log("Client has disconnected " + socket.id);
   });
 });
+
+
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}

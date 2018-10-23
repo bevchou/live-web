@@ -4,23 +4,9 @@ socket.on('connect', function() {
   console.log("Connected");
 });
 
-// Receive from events
-socket.on('webcamImg', function(data) {
-
-});
-
-socket.on('currentData', function(data) {
+socket.on('returnImg', function(data) {
   console.log(data);
-
-});
-
-socket.on('theImg', function(data) {
-  console.log(data);
-  mainImg.src = data;
-  //remove image after 1 second
-  setTimeout(function() {
-    mainImg.src = "";
-  }, 999);
+  showImg.src = data.filename;
 });
 
 //GLOBAL VARIABLES
@@ -35,29 +21,18 @@ let time;
 // run code once the window loads
 window.addEventListener('load', function() {
 
-  // if (window.innerWidth < 800) {
-  //   width = window.innerWidth * 0.8;
-  // } else {
-  //   width = 800;
-  // }
-
   //get elements
   let video = document.getElementById('myVideo');
   let canvas = document.getElementById('myCanvas');
   let captureImg = document.getElementById('captureImg');
   let flipButton = document.getElementById('flipButton');
-  let showTime = document.getElementById('showTime');
-  let mainImg = document.getElementById('mainImg');
+  let showImg = document.getElementById('showImg');
 
   //check if there is an image at the current time
   //by querying the database every second
   function checkImgDb() {
-    time = new Date();
-    timeInSec = getTotalSeconds(time);
-    showTime.innerHTML = timeInSec;
     socket.emit('timeUpdate', timeInSec);
   }
-  setInterval(checkImgDb, 1000);
 
   // what media we want
   let constraints = {
@@ -128,18 +103,20 @@ window.addEventListener('load', function() {
     }
     //get the data URL & send to other clients
     let imgDataURL = canvas.toDataURL();
-    let currentTime = new Date();
-    let totSecs = getTotalSeconds(currentTime);
+    let currentDate = new Date();
+    let currentTime = currentDate.getTime();
+    let totSecs = getTotalSeconds(currentDate);
     //create object to send
     let imgObject = {
-      filename: "img_" + totSecs + ".jpg",
+      filename: "img_" + currentTime + ".jpg",
       dataURL: imgDataURL,
-      hour: currentTime.getHours(),
-      minute: currentTime.getMinutes(),
-      second: currentTime.getSeconds(),
+      epochTime: currentTime,
+      hour: currentDate.getHours(),
+      minute: currentDate.getMinutes(),
+      second: currentDate.getSeconds(),
       totalSeconds: totSecs
     };
-    console.log(imgObject);
+    // console.log(imgObject);
     //send object
     socket.emit('webcamImg', imgObject);
 
