@@ -9,7 +9,7 @@ var options = {
 
 var httpServer = https.createServer(options, requestHandler);
 var url = require('url');
-httpServer.listen(8001);
+httpServer.listen(8080);
 
 function requestHandler(req, res) {
   var parsedUrl = url.parse(req.url);
@@ -44,26 +44,16 @@ var io = require('socket.io').listen(httpServer);
 io.sockets.on('connection', function(socket) {
   console.log("We have a new client: " + socket.id);
 
-  // whens someone sends a video frame
-  socket.on('webcamImg', function(data) {
-    // Send it to all of the clients
-    // io.sockets.emit('webcamImg', data);
-    console.log('got img: ' + data.filename);
-    let dataURL = data.dataURL;
-    //convert data URL to img
-    let searchFor = "data:image/jpeg;base64,";
-    let strippedImage = dataURL.slice(dataURL.indexOf(searchFor) + searchFor.length);
-    let binaryImage = new Buffer(strippedImage, 'base64');
+  // whens someone sends a video
+  socket.on('videoBlob', function(data) {
+    console.log('got video: ' + data.filename);
+
     //write file
-    fs.writeFileSync(__dirname + "/imgs/" + data.filename, binaryImage);
+    fs.writeFileSync(__dirname + "/vids/" + data.filename, data.blobData);
     //create object for database
     let objectToDb = {
-      filename: "/imgs/" + data.filename,
-      epochTime: data.epochTime,
-      hour: data.hour,
-      minute: data.minute,
-      second: data.second,
-      totalSeconds: data.totalSeconds
+      filename: "/vids/" + data.filename,
+      time: data.time
     };
     //store object to database
     db.insert(objectToDb, function(err, newDocs) {
@@ -79,9 +69,10 @@ io.sockets.on('connection', function(socket) {
       //find the total number of images & pick one at random
       let totalImgs = docs.length;
       let index = getRndInteger(0, totalImgs - 1);
+      console.log(totalImgs, index);
       //send the file path of random img to client
       console.log("sending img: " + docs[index].filename);
-      socket.emit('returnImg', docs[index]);
+      socket.emit('returnFile', docs[index]);
     });
 
   });

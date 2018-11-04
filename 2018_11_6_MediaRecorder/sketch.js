@@ -4,10 +4,10 @@ socket.on('connect', function() {
   console.log("Connected");
 });
 
-socket.on('returnImg', function(data) {
+socket.on('returnFile', function(data) {
   console.log(data);
-  showImg.src = data.filename;
-  showImg.style.visibility = "visible";
+  showVideo.src = data.filename;
+  showVideo.style.visibility = "visible";
   video.style.visibility = "hidden";
 });
 
@@ -32,14 +32,13 @@ window.addEventListener('load', function() {
 
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-
-
   //get elements
   video = document.getElementById('myVideo');
+  let showVideo = document.getElementById('showVideo');
   let canvas = document.getElementById('myCanvas');
   let capture = document.getElementById('capture');
   let flipButton = document.getElementById('flipButton');
-  let showImg = document.getElementById('showImg');
+  // let showImg = document.getElementById('showImg');
 
 
   //hide image
@@ -99,46 +98,20 @@ window.addEventListener('load', function() {
   } else {
     //hide the button if not running on mobile device
     flipButton.style.visibility = "hidden";
+
   }
 
 
   //when you click on send button
   capture.addEventListener('click', function() {
     if (videoMode) {
-      //get canvas context
-      let context = canvas.getContext('2d');
-      //when the width and height are available
-      //draw the image to the canvas
-      if (width && height) {
-        canvas.width = width;
-        canvas.height = height;
-        context.drawImage(video, 0, 0, width, height);
-      }
-      //get the data URL & send to other clients
-      let imgDataURL = canvas.toDataURL();
-      let currentDate = new Date();
-      let currentTime = currentDate.getTime();
-      let totSecs = getTotalSeconds(currentDate);
-      //create object to send
-      let imgObject = {
-        filename: "img_" + currentTime + ".jpg",
-        dataURL: imgDataURL,
-        epochTime: currentTime,
-        hour: currentDate.getHours(),
-        minute: currentDate.getMinutes(),
-        second: currentDate.getSeconds(),
-        totalSeconds: totSecs
-      };
-      // console.log(imgObject);
-      //send object
-      socket.emit('webcamImg', imgObject);
+      getVideoClip();
       setImgMode();
     } else {
       setCameraMode();
     }
 
   });
-
 
 
   //function to start the getting the video feed
@@ -148,6 +121,7 @@ window.addEventListener('load', function() {
     video.src = "";
     // get permission to get video/audio
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+        myStream = stream;
         // attach stream to video object
         video.srcObject = stream;
         // wait for stream to load enough to play
@@ -164,9 +138,11 @@ window.addEventListener('load', function() {
 
   function setCameraMode() {
     capture.innerHTML = "capture";
-    showImg.style.visibility = "hidden";
+    showVideo.style.visibility = "hidden";
     video.style.visibility = "visible";
-    flipButton.style.visibility = "visible";
+    if (isMobile) {
+      flipButton.style.visibility = "visible";
+    }
     videoMode = true;
   }
 
@@ -178,21 +154,30 @@ window.addEventListener('load', function() {
 
   function getVideoClip() {
     let chunks = [];
-    let mediaRecorder = new MediaRecorder(stream);
-    console.log(mediaRecorder);
+    let mediaRecorder = new MediaRecorder(myStream);
+    console.log('recording a clip')
+
     //when recording is done
     mediaRecorder.addEventListener('stop', function(e) {
       console.log('stop');
-      let newVid = document.createElement('video');
-      newVid.controls = true;
+
+      //create blob video
       let blob = new Blob(chunks, {
         'type': 'video/webm'
       });
-      let videoURL = window.URL.createObjectURL(blob);
-      newVid.src = videoURL;
 
-      document.body.appendChild(newVid);
+      //put into an object
+      let currentTime = Date.now();
+      let blobObject = {
+        filename: "vid_" + currentTime + ".webm",
+        blobData: blob,
+        time: currentTime
+      }
+
+      //send object to server
+      socket.emit('videoBlob', blobObject);
     });
+
     //put data chunks into array
     mediaRecorder.addEventListener('dataavailable', function(e) {
       console.log('data available');
@@ -201,10 +186,11 @@ window.addEventListener('load', function() {
 
     mediaRecorder.start();
 
-    //record only two seconds
+    //record only 4 seconds
     setTimeout(function() {
       mediaRecorder.stop();
-    }, 2000);
+    }, 4000);
+
   }
 
 });
