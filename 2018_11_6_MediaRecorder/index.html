@@ -1,0 +1,34 @@
+<!-- useful links
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+
+-->
+
+
+<html>
+
+<head>
+  <title>Beverly Chou - Camera</title>
+
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="sketch.js"></script>
+  <script type="text/javascript" src="helpers.js"></script>
+
+</head>
+
+<body>
+
+  <img src="" id="showImg">
+
+  <video playsinline controls="true" autoplay id="myVideo"></video>
+  <br>
+  <button id="capture">capture</button>
+  <button id="flipButton">flip cam</button>
+  <canvas id="myCanvas"></canvas>
+  <!-- <canvas id="overlayCanvas"></canvas> -->
+
+</body>
+
+</html>

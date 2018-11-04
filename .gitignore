@@ -2,3 +2,5 @@ notForGithub/
 itp_io_cert/
 **/my-cert.pem
 **/my-key.pem
+*.DS_Store
+testExample/
