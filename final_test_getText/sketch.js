@@ -6,57 +6,34 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/elementFromPoint
 
 
-let test = 0;
 
 window.addEventListener('load', function() {
 
-
-  var textnodes = nativeSelector();
+  var textnodes = textNodesUnder(document.body);
+  console.log(textnodes);
   for (let i = 0; i < textnodes.length; i++) {
     let newNode = document.createElement('particles');
-    newNode.innerHTML = explosifyText(textnodes[i].nodeValue);
+    newNode.innerHTML = textToParticle(textnodes[i].nodeValue);
     textnodes[i].parentNode.replaceChild(newNode, textnodes[i]);
+    if (i == textnodes.length - 1) {
+      changeLetters();
+      console.log('done');
+    }
   }
 
+  //run this after loop above ends?
+  function changeLetters() {
+    document.addEventListener('mousemove', function(e) {
+      let activeItems = document.elementsFromPoint(e.x, e.y);
+      // test = activeItems;
+      // console.log(test);
+      let letter = activeItems.find(letter => letter.localName == "particle");
+      if (letter) {
+        letter.style.color = "red";
+      }
+    });
+  }
 
-
-  // document.addEventListener('mousemove', function(e) {
-  //   let activeItems = document.elementsFromPoint(e.x, e.y);
-  //   test = activeItems;
-  //   console.log(test);
-  //   let letter = activeItems.find(letter => letter.localName == "particle");
-  //   if (letter) {
-  //     letter.style.color = "red";
-  //   }
-  //
-  // });
-
-  // for (var i = 0, len = textnodes.length; i < len; i++) {
-  //   // stuff.push(textnodes[i].nodeValue);
-  //   // textnodes[i].nodeValue = nv.replace(/£/g,'€');
-  //   if (!/^\s*$/.test(textnodes[i].nodeValue)) {
-  //     console.log(textnodes[i].nodeValue);
-  //
-  //     for (let j = 0; j < textnodes[i].length; j++) {
-  //       // let newNode = document.createElement('particles');
-  //       // newNode.innerHTML = textnodes[i][j];
-  //       console.log(textnodes[i]);
-  //       // textnodes[i].parentNode.replaceChild(newNode, textnodes[i]);
-  //     }
-  //
-  //
-  //
-  //   }
-  //
-  // }
-
-  // x = stuff[5];
-  // console.log(x);
-  // for (let i = 0; i < x.length; i++) {
-  //   let newNode = document.createElement('particle');
-  //   newNode.innerHTML = x[i];
-  //   x.parentNode.replaceChild(newNode, x);
-  // }
 
   //borrowed from https://github.com/plehoux/fontBomb/blob/master/js/explosion.js
   //look at "explosifyText" function
@@ -94,19 +71,21 @@ window.addEventListener('load', function() {
     return chars.join(' ');
   };
 
-  //borrowed from some guy in this stackoverflow thread
-  // https://stackoverflow.com/questions/18643766/find-and-replace-specific-text-characters-across-a-document-with-js
-  function nativeSelector() {
-    var elements = document.querySelectorAll("body, body *");
-    var results = [];
-    var child;
-    for (var i = 0; i < elements.length; i++) {
-      child = elements[i].childNodes[0];
-      if (elements[i].hasChildNodes() && child.nodeType == 3) {
-        results.push(child);
+
+// https://stackoverflow.com/questions/22921242/remove-carriage-return-and-space-from-a-string
+// https://stackoverflow.com/questions/10730309/find-all-text-nodes-in-html-page
+  function textNodesUnder(el) {
+    //get all the text nodes
+    var n, a = [], b = []
+      walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+    while (n = walk.nextNode()) a.push(n);
+    //remove all text nodes with whitespace or carriage return
+    for (let i =0; i < a.length; i++){
+      if (a[i].nodeValue.replace(/[\n\r]+/g, '')){
+        b.push(a[i]);
       }
     }
-    return results;
+    return b;
   }
 
 });
