@@ -1,0 +1,23 @@
+#allMsgs {
+  font-size: 12px;
+  font-family: sans-serif;
+  position: absolute;
+  width: 200px;
+  padding: 10px 10px 0px 10px;
+  top: 100px;
+  left: 20px;
+  background-color: rgba(247, 232, 244, 0.9);
+  color: black;
+  z-index: 99999 !important;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+#allMsgs div p {
+  margin: 3px 10px 20px 0px;
+}
+
+#allMsgs div b {
+  margin: 0px;
+  padding: 0px;
+}

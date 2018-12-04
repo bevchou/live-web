@@ -1,0 +1,19 @@
+{
+  "name": "typographic awareness",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "ITP Live Web / Comp Typo - Testing WebRTC w/ Chrome extension",
+
+  "browser_action": {
+    "default_title": "click me to add a note",
+    "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": ["jquery.js", "peer.min.js", "background.js"]
+  },
+  "permissions": [
+    "tabs",
+    "<all_urls>"
+  ]
+}

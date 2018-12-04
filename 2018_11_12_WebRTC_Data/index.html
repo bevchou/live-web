@@ -1,0 +1,24 @@
+<html>
+
+<head>
+  <title>Beverly Chou - PeerJS</title>
+
+  <!-- <script type="text/javascript" src="/socket.io/socket.io.js"></script> -->
+  <script src="peer.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="sketch.js"></script>
+
+</head>
+
+
+<body onload="init()">
+  <input type="text" id="other_peer_id" value="PeerID to Call">
+  <input type="button" value="Call" onclick="placecall()"><br />
+  <input type="text" id="chat">
+  <input type="button" value="Send" onclick="sendmessage()"><br />
+  <div id="chatlog"></div>
+  <div id="othermouse" style="background-color: red; width: 50; height: 50;"></div>
+</body>
+
+</html>

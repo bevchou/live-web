@@ -1,0 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: sans-serif;
+  color: #000000;
+  font-size: 18px;
+  background-color: #ededed;
+}
+
+
+#myVideo {
+  position: relative;
+  z-index: 9999;
+  margin: auto;
+}
