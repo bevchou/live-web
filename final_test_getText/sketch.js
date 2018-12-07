@@ -12,6 +12,34 @@ let letterArray = [];
 
 window.addEventListener('load', function() {
 
+  // https://blog.arnellebalane.com/using-the-ambient-light-sensor-api-to-add-brightness-sensitive-dark-mode-to-my-website-82223e754630
+  //may need to enable "Generic Sensor Extra Classes" under chrome flags
+  //if light sensor is available
+  if ('AmbientLightSensor' in window) {
+    const sensor = new AmbientLightSensor();
+    //when the reading changes
+    sensor.onreading = () => {
+      console.log('Current light level:', sensor.illuminance);
+      if (sensor.illuminance <= 50) {
+        let bgDarkness = mapRange(sensor.illuminance, 0, 50, 35, 255);
+        // document.body.style.backgroundColor = "hsl(0, 100%," + bgDarkness + ")";
+        document.body.style.backgroundColor = "rgb(" + bgDarkness + "," + bgDarkness + "," + bgDarkness + ")";
+        if (bgDarkness <= 120) {
+          let textColor = 255 - bgDarkness;
+          document.body.style.color = "rgb(" + textColor + "," + textColor + "," + textColor + ")";
+        }
+      } else {
+        document.body.style.backgroundColor = "white";
+          document.body.style.color = "black";
+      }
+
+    };
+    sensor.onerror = (event) => {
+      console.log(event.error.name, event.error.message);
+    };
+    sensor.start();
+  }
+
   //get all text nodes in the webpage
   var textnodes = textNodesUnder(document.body);
   console.log(textnodes);
@@ -30,33 +58,30 @@ window.addEventListener('load', function() {
   function changeLetters() {
     document.addEventListener('mousemove', function(e) {
       //get all elements that collides with mouse
-      let activeItems = document.elementsFromPoint(e.x, e.y);
+      let activeItems = document.elementsFromPoint(e.clientX, e.clientY);
       //only get the element that is a "character" element
       let letter = activeItems.find(letter => letter.localName == "character");
       if (letter) {
         let posData = letter.getBoundingClientRect();
-        let dx = (e.x - posData.x) * 1;
-        let dy = -(e.y - posData.y) * 1;
+        let dx = (e.x - posData.x) * 1.25;
+        let dy = -(e.y - posData.y) * 1.25;
 
         // letter.style.transform = "translate(" + dx + "px," + dy + "px)";
         //https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
         letter.animate([{
+            transform: "translate(0px, 0px)"
+          },
+          {
             transform: "translate(" + dx + "px," + dy + "px )"
           },
           {
             transform: "translate(0px, 0px)"
           }
         ], {
-          duration: 1000,
+          duration: 1200,
+          easing: "ease-out",
         });
 
-
-
-        // let currentStyle = window.getComputedStyle(letter, null).getPropertyValue('font-size');
-        // let currentSize = parseFloat(currentStyle);
-        // letter.style.fontSize = currentSize * 1.2 + "px";
-
-        // console.log(currentSize);
       }
     });
   }
@@ -116,3 +141,12 @@ window.addEventListener('load', function() {
   }
 
 });
+
+//https://stackoverflow.com/questions/48802987/is-there-a-map-function-in-vanilla-javascript-like-p5-js
+// linearly maps value from the range (a..b) to (c..d)
+function mapRange(value, a, b, c, d) {
+  // first map value from (a..b) to (0..1)
+  value = (value - a) / (b - a);
+  // then map it from (0..1) to (c..d) and return it
+  return c + value * (d - c);
+}
