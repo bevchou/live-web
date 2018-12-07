@@ -1,101 +1,107 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
+
 <head>
-<!-- THIS IS A COMMENT -->
-<title>Sample Web Page</title>
-<script type="text/javascript" src="sketch.js"></script>
-<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <!-- THIS IS A COMMENT -->
+  <title>Sample Web Page</title>
+  <!-- MY STUFF -->
+  <script type="text/javascript" src="sketch.js"></script>
+  <script type="text/javascript" src="letterMove.js"></script>
+  <link href="style.css" rel="stylesheet" type="text/css">
+
+
+  <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
+
 <body bgcolor="#ffffff" text="#000000">
-<h2>Sample Web Page</h2>
-<!-- How to insert an image -->
-<img src="http://www.columbia.edu/~fdc/picture-of-something.jpg" alt="Brief description" width="100%"><br>
-<small><i>A random photo, maximize your browser to enlarge.</i></small>
+  <h2>Sample Web Page</h2>
+  <!-- How to insert an image -->
+  <img src="http://www.columbia.edu/~fdc/picture-of-something.jpg" alt="Brief description" width="100%"><br>
+  <small><i>A random photo, maximize your browser to enlarge.</i></small>
 
-<p>
+  <p>
 
-<a href="http://www.columbia.edu/~fdc/">Frank da Cruz</a><br>
-Sat Jan 17 12:07:32 2004
+    <a href="http://www.columbia.edu/~fdc/">Frank da Cruz</a><br>
+    Sat Jan 17 12:07:32 2004
 
-<h3><a name="contents">CONTENTS</a></h3>
+    <h3><a name="contents">CONTENTS</a></h3>
 
-<ol>
-<li><a href="#basics">Creating a Web Page</a>
-<li><a href="#syntax">HTML Syntax</a>
-<li><a href="#chars">Special Characters</a>
-<li><a href="#convert">Converting Plain Text to HTML</a>
-</ol>
-<p>
-<hr>
+    <ol>
+      <li><a href="#basics">Creating a Web Page</a>
+      <li><a href="#syntax">HTML Syntax</a>
+      <li><a href="#chars">Special Characters</a>
+      <li><a href="#convert">Converting Plain Text to HTML</a>
+    </ol>
+    <p>
+      <hr>
 
-<h3><a name="basics">1. Creating a Web Page</a></h3>
+      <h3><a name="basics">1. Creating a Web Page</a></h3>
 
-This page was typed by hand.  Anybody can do this, you don't need any
-special "web creation" tools or HTML editors, and the pages you make can be
-viewed from any browser.  To see how this page was made, choose
-<b>View Source</b> (or View Page Source, or View Document Source) in your
-browser's menu.  A simple web page like this one is just plain text with
-HTML commands (markup) mixed in.  HTML commands themselves are plain text.
+      This page was typed by hand. Anybody can do this, you don't need any
+      special "web creation" tools or HTML editors, and the pages you make can be
+      viewed from any browser. To see how this page was made, choose
+      <b>View Source</b> (or View Page Source, or View Document Source) in your
+      browser's menu. A simple web page like this one is just plain text with
+      HTML commands (markup) mixed in. HTML commands themselves are plain text.
 
-<p>
+      <p>
 
-When you're just learning and want to experiment, you can do everything on
-your PC.  Create a new directory ("folder") for your website, and then put
-the web-page files (HTML plus any pictures) in it.  Use NotePad or other
-plain-text editor (not word processor) on your PC to create an
-<tt>index.html</tt> file, which you can view locally with your Web browser.
-(You can also use word processors such as Word or WordPad if you save in
-"plain text", "text", "text document", or "text document MS-DOS format".)
-<a href="#install">Later</a> I'll explain how you can install your web site on
-the Internet.
+        When you're just learning and want to experiment, you can do everything on
+        your PC. Create a new directory ("folder") for your website, and then put
+        the web-page files (HTML plus any pictures) in it. Use NotePad or other
+        plain-text editor (not word processor) on your PC to create an
+        <tt>index.html</tt> file, which you can view locally with your Web browser.
+        (You can also use word processors such as Word or WordPad if you save in
+        "plain text", "text", "text document", or "text document MS-DOS format".)
+        <a href="#install">Later</a> I'll explain how you can install your web site on
+        the Internet.
 
-<p>
-<dl>
-<dt><i>Example for Windows:</i>
+        <p>
+          <dl>
+            <dt><i>Example for Windows:</i>
 
-<dd>Move your mouse cursor to the desktop.  Right-click,
-choose <i>New</i>, then choose <i>Folder</i>, and a "New Folder" appears,
-with its name highlighted.  Type "Web" to change the folder's name to Web
-(or anything else you want).  Then
-<i>Start</i>&nbsp;<tt>-&gt;</tt>&nbsp;<i>Run</i> and type "notepad" to
-start NotePad.  Now you can create your first Web page.
+            <dd>Move your mouse cursor to the desktop. Right-click,
+              choose <i>New</i>, then choose <i>Folder</i>, and a "New Folder" appears,
+              with its name highlighted. Type "Web" to change the folder's name to Web
+              (or anything else you want). Then
+              <i>Start</i>&nbsp;<tt>-&gt;</tt>&nbsp;<i>Run</i> and type "notepad" to
+              start NotePad. Now you can create your first Web page.
 
-</dl>
+          </dl>
 
-<hr>
-<h3><a name="syntax">2. HTML Syntax</a></h3>
+          <hr>
+          <h3><a name="syntax">2. HTML Syntax</a></h3>
 
-Web pages are written in Hyper Text Markup Language (HTML).  HTML has three
-special characters:
-<tt>&lt;</tt>, <tt>&amp;</tt>, <tt>&gt;</tt>.
-An HTML command is enclosed in <tt>&lt;...&gt;</tt>, for example
-<tt>&lt;p&gt;</tt>, which is a paragraph separator, or <tt>&lt;b&gt;</tt>
-("begin bold") and <tt>&lt;/b&gt;</tt> ("end bold").  So the following
-HTML text:
+          Web pages are written in Hyper Text Markup Language (HTML). HTML has three
+          special characters:
+          <tt>&lt;</tt>, <tt>&amp;</tt>, <tt>&gt;</tt>.
+          An HTML command is enclosed in <tt>&lt;...&gt;</tt>, for example
+          <tt>&lt;p&gt;</tt>, which is a paragraph separator, or <tt>&lt;b&gt;</tt>
+          ("begin bold") and <tt>&lt;/b&gt;</tt> ("end bold"). So the following
+          HTML text:
 
-<p>
-<blockquote>
-<pre>
+          <p>
+            <blockquote>
+              <pre>
 This sentence contains &lt;b&gt;bold&lt;/b&gt; text.
 </pre>
-</blockquote>
-<p>
+            </blockquote>
+            <p>
 
-produces:
+              produces:
 
-<p>
-<blockquote>
-This sentence contains <b>bold</b> text.
-</blockquote>
-<p>
+              <p>
+                <blockquote>
+                  This sentence contains <b>bold</b> text.
+                </blockquote>
+                <p>
 
-A Web page starts with a series of HTML commands, and ends with
-a few more.  The contents go in between:
+                  A Web page starts with a series of HTML commands, and ends with
+                  a few more. The contents go in between:
 
-<p>
-<blockquote>
-<pre>
+                  <p>
+                    <blockquote>
+                      <pre>
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -104,89 +110,93 @@ a few more.  The contents go in between:
 &lt;/head&gt;
 &lt;body bgcolor="#ffffff" text="#000000"&gt;
 </pre>
-<p>
-<i>(Contents go here)</i>
-<p>
-<pre>
+                      <p>
+                        <i>(Contents go here)</i>
+                        <p>
+                          <pre>
 &lt;/body&gt;
 &lt;/html&gt;
 </pre>
-</blockquote>
-<p>
+                    </blockquote>
+                    <p>
 
-The first line (DOCTYPE) specifies which language the page uses; just copy
-this line<sup><small>1</small></sup>.  The next line, <tt>&lt;html&gt;</tt>,
-starts the page, and is matched by the last line, <tt>&lt;/html&gt;</tt>,
-which closes the page.  <tt>&lt;head&gt;</tt>, starts the heading, which
-contains a title to be displayed on the browser's title bar and a
-declaration of the character set (usually US-ASCII, ISO-8859-1, or UTF-8).
-<tt>&lt;/head&gt;</tt> closes the heading.
+                      The first line (DOCTYPE) specifies which language the page uses; just copy
+                      this line<sup><small>1</small></sup>. The next line, <tt>&lt;html&gt;</tt>,
+                      starts the page, and is matched by the last line, <tt>&lt;/html&gt;</tt>,
+                      which closes the page. <tt>&lt;head&gt;</tt>, starts the heading, which
+                      contains a title to be displayed on the browser's title bar and a
+                      declaration of the character set (usually US-ASCII, ISO-8859-1, or UTF-8).
+                      <tt>&lt;/head&gt;</tt> closes the heading.
 
-<p>
+                      <p>
 
-The <tt>&lt;body&gt;</tt> statement starts the body of the document and can
-contain specifiers for color and other attributes.  This one chooses black
-writing on a white background.  The body is closed by
-<tt>&lt;/body&gt;</tt> statement.
+                        The <tt>&lt;body&gt;</tt> statement starts the body of the document and can
+                        contain specifiers for color and other attributes. This one chooses black
+                        writing on a white background. The body is closed by
+                        <tt>&lt;/body&gt;</tt> statement.
 
-<p>
+                        <p>
 
-As you can see, most HTML commands (but not all!) come in begin-end pairs:
-<tt>&lt;b&gt;...&lt;/b&gt;</tt>,
-<tt>&lt;head&gt;...&lt;/head&gt;</tt>, etc.  The closing part of the command
-has a slash (<tt>/</tt>) between the <tt>&lt;</tt> and the first letter of
-the command.
+                          As you can see, most HTML commands (but not all!) come in begin-end pairs:
+                          <tt>&lt;b&gt;...&lt;/b&gt;</tt>,
+                          <tt>&lt;head&gt;...&lt;/head&gt;</tt>, etc. The closing part of the command
+                          has a slash (<tt>/</tt>) between the <tt>&lt;</tt> and the first letter of
+                          the command.
 
-<p>
+                          <p>
 
 
-Blank lines and line breaks are ignored.  The browser automatically "flows"
-your text into lines and paragraphs that fit in its window.  Paragraphs must
-be separated by <tt>&lt;p&gt;</tt>.  Line breaks can be forced by
-<tt>&lt;br&gt;</tt>.
+                            Blank lines and line breaks are ignored. The browser automatically "flows"
+                            your text into lines and paragraphs that fit in its window. Paragraphs must
+                            be separated by <tt>&lt;p&gt;</tt>. Line breaks can be forced by
+                            <tt>&lt;br&gt;</tt>.
 
-<p>
-<dl>
-<dt><i>Example for Windows:</i>
+                            <p>
+                              <dl>
+                                <dt><i>Example for Windows:</i>
 
-<dd>Use the mouse to copy the HTML above into NotePad.  Then save the file
-(<i>File</i>&nbsp;<tt>-&gt;</tt>&nbsp;<i>Save&nbsp;As...</i>)
-in your Web directory as <tt>index.html</tt>.  Suppose your Windows username
-is Olga.  Then (depending on which version of Windows you have) this might
-be:
+                                <dd>Use the mouse to copy the HTML above into NotePad. Then save the file
+                                  (<i>File</i>&nbsp;<tt>-&gt;</tt>&nbsp;<i>Save&nbsp;As...</i>)
+                                  in your Web directory as <tt>index.html</tt>. Suppose your Windows username
+                                  is Olga. Then (depending on which version of Windows you have) this might
+                                  be:
 
-<p>
-<blockquote>
-<pre>
+                                  <p>
+                                    <blockquote>
+                                      <pre>
 <tt>C:\Documents and Settings\Olga\Desktop\Web\index.html</tt>
 </pre>
-</blockquote>
-<p>
+                                    </blockquote>
+                                    <p>
 
-Now to see your new web page, just double-click on the Web folder and
-then double-click on <tt>index.html</tt>.
-</dl>
-<p>
+                                      Now to see your new web page, just double-click on the Web folder and
+                                      then double-click on <tt>index.html</tt>.
+                              </dl>
+                              <p>
 
-Now you're ready to start adding "content" to your web page.  Go back to
-NotePad and replace the title and "(Contents go here)" with whatever you
-want.  Any time you want to see the result, use
-<i>File</i>&nbsp;<tt>-&gt;</tt>&nbsp;<i>Save</i> in NotePad and then
-click the Reload button on your browser.
+                                Now you're ready to start adding "content" to your web page. Go back to
+                                NotePad and replace the title and "(Contents go here)" with whatever you
+                                want. Any time you want to see the result, use
+                                <i>File</i>&nbsp;<tt>-&gt;</tt>&nbsp;<i>Save</i> in NotePad and then
+                                click the Reload button on your browser.
 
-<p>
+                                <p>
 
-The next sections tell how to achieve different kinds of effects.
+                                  The next sections tell how to achieve different kinds of effects.
 
-<br>__________________<br>
-<small><ol><li>HTML 4.01 is chosen because it supports tables (new to HTML 3.2)
-as well as a couple other desirable features, such as the ability to specify
-an image width as a percentage of the Browser's window width, and a bunch more
-character entity symbols such as</small> <tt>&amp;euro;</tt>
-<small>(new&nbsp;to&nbsp;4.01).  Otherwise we would stick with the oldest
-available verifiable version, which is 2.0.</ol></small>
+                                  <br>__________________<br>
+                                  <small>
+                                    <ol>
+                                      <li>HTML 4.01 is chosen because it supports tables (new to HTML 3.2)
+                                        as well as a couple other desirable features, such as the ability to specify
+                                        an image width as a percentage of the Browser's window width, and a bunch more
+                                        character entity symbols such as
+                                  </small> <tt>&amp;euro;</tt>
+                                  <small>(new&nbsp;to&nbsp;4.01). Otherwise we would stick with the oldest
+                                    available verifiable version, which is 2.0.</ol></small>
 
 
-<hr>
-</body>  <!-- close the <body> begun above -->
-</html>  <!-- close the <html> begun above -->
+                                  <hr>
+</body> <!-- close the <body> begun above -->
+
+</html> <!-- close the <html> begun above -->

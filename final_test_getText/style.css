@@ -1,15 +1,9 @@
-html, body {
-  z-index: -1000;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  font-family: sans-serif;
-  color: #000000;
-  font-size: 18px;
-  background-color: #ededed;
+html, body {}
+
+/* .dostuff {
+  transition: 0.5s linear;
 }
 
-
-particle {
-  z-index: 9999999;
-}
+.dostuff.animate:hover {
+  transform: translate(10px,10px);
+} */
