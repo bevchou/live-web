@@ -35,10 +35,20 @@ window.addEventListener('load', function() {
       let letter = activeItems.find(letter => letter.localName == "character");
       if (letter) {
         let posData = letter.getBoundingClientRect();
-        let dx = (e.x - posData.x) * 2;
-        let dy = (e.y - posData.y) * 2;
+        let dx = (e.x - posData.x) * 1;
+        let dy = -(e.y - posData.y) * 1;
 
-        letter.style.transform = "translate(" + dx + "px," + dy + "px)";
+        // letter.style.transform = "translate(" + dx + "px," + dy + "px)";
+        //https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
+        letter.animate([{
+            transform: "translate(" + dx + "px," + dy + "px )"
+          },
+          {
+            transform: "translate(0px, 0px)"
+          }
+        ], {
+          duration: 1000,
+        });
 
 
 
