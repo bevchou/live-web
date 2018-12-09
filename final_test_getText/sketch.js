@@ -1,4 +1,5 @@
 // LINKS
+// THE BEST: https://whatwebcando.today
 // https://stackoverflow.com/questions/18643766/find-and-replace-specific-text-characters-across-a-document-with-js
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/parentNode
 // https://developer.mozilla.org/en-US/docs/Web/API/Text
@@ -6,11 +7,21 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/elementFromPoint
 
 // GLOBAL VARIABLES
-let letterArray = [];
-
 
 
 window.addEventListener('load', function() {
+
+
+  navigator.getBattery().then(function(battery) {
+    let batteryStatus = battery.charging;
+
+    console.log(battery);
+
+    battery.addEventListener('chargingchange', function() {
+      batteryStatus = battery.charging;
+      console.log(batteryStatus);
+    });
+  });
 
   // https://blog.arnellebalane.com/using-the-ambient-light-sensor-api-to-add-brightness-sensitive-dark-mode-to-my-website-82223e754630
   //may need to enable "Generic Sensor Extra Classes" under chrome flags
@@ -19,26 +30,32 @@ window.addEventListener('load', function() {
     const sensor = new AmbientLightSensor();
     //when the reading changes
     sensor.onreading = () => {
-      console.log('Current light level:', sensor.illuminance);
-      if (sensor.illuminance <= 50) {
-        let bgDarkness = mapRange(sensor.illuminance, 0, 50, 35, 255);
-        // document.body.style.backgroundColor = "hsl(0, 100%," + bgDarkness + ")";
+      let luxLevel = sensor.illuminance;
+      console.log('Current light level:', luxLevel);
+      //change background & text color based on light reading
+      if (luxLevel <= 35) {
+        let bgDarkness = mapRange(luxLevel, 0, 35, 35, 255);
+        //it's dark
         document.body.style.backgroundColor = "rgb(" + bgDarkness + "," + bgDarkness + "," + bgDarkness + ")";
-        if (bgDarkness <= 120) {
+        if (luxLevel <= 20 && bgDarkness < 110) {
           let textColor = 255 - bgDarkness;
           document.body.style.color = "rgb(" + textColor + "," + textColor + "," + textColor + ")";
+        } else {
+          //medium dark
+          document.body.style.color = "black";
         }
       } else {
+        //bright light
         document.body.style.backgroundColor = "white";
-          document.body.style.color = "black";
+        document.body.style.color = "black";
       }
-
     };
     sensor.onerror = (event) => {
       console.log(event.error.name, event.error.message);
     };
     sensor.start();
   }
+
 
   //get all text nodes in the webpage
   var textnodes = textNodesUnder(document.body);

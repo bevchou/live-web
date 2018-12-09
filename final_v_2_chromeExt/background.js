@@ -40,6 +40,11 @@ var makeCall = function() {
 };
 
 
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+   chrome.tabs.executeScript(null, {file: "myscript.js"});
+});
+
 //listen for messages from popup.js
 chrome.runtime.onMessage.addListener(function(data, sender, sendResponse) {
   //got user data
