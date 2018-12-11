@@ -3,19 +3,15 @@
   "version": "1.0",
   "manifest_version": 2,
   "description": "ITP Live Web / Comp Typo - Testing WebRTC w/ Chrome extension",
-  "browser_action": {
-  },
+  "browser_action": {},
 
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["jquery.js"]
-  }],
+
 
   "background": {
-    "scripts": ["jquery.js", "peer.min.js", "background.js"]
+    "scripts": ["peer.min.js", "background.js"]
   },
   "permissions": [
-    "activeTab",
+    "tabs",
     "<all_urls>"
   ]
 }

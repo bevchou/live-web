@@ -12,17 +12,6 @@ let luxLevel = null;
 window.addEventListener('load', function() {
 
 
-  navigator.getBattery().then(function(battery) {
-    let batteryStatus = battery.charging;
-
-    console.log(battery);
-
-    battery.addEventListener('chargingchange', function() {
-      batteryStatus = battery.charging;
-      console.log(batteryStatus);
-    });
-  });
-
   // https://blog.arnellebalane.com/using-the-ambient-light-sensor-api-to-add-brightness-sensitive-dark-mode-to-my-website-82223e754630
   //may need to enable "Generic Sensor Extra Classes" under chrome flags
   //if light sensor is available
@@ -36,11 +25,14 @@ window.addEventListener('load', function() {
         //change background & text color based on light reading
         if (luxLevel <= 35) {
           let bgDarkness = mapRange(luxLevel, 0, 35, 0, 255);
-          let scaleFactor = mapRange(luxLevel, 0, 40, 0.25, 1);
+          let scaleFactor = mapRange(luxLevel, 0, 40, 0.3, 1);
           console.log(scaleFactor);
           //it's dark
           // document.body.style.color = "rgb(" + bgDarkness + "," + bgDarkness + "," + bgDarkness + ")";
-          document.body.style.opacity = scaleFactor;
+          for (i = 0; i < allWords.length; i++){
+            allWords[i].style.opacity = scaleFactor;
+          }
+          // document.body.style.opacity = scaleFactor;
 
           // if (luxLevel <= 20 && bgDarkness < 110) {
           //   let textColor = 255 - bgDarkness;
@@ -51,8 +43,8 @@ window.addEventListener('load', function() {
           // }
         } else {
           //bright light
-          document.body.style.backgroundColor = "white";
-          document.body.style.color = "black";
+          document.body.style.opacity = 1;
+          // document.body.style.color = "black";
         }
       };
       sensor.onerror = (event) => {

@@ -1,16 +1,15 @@
-#allMsgs {
+#infoBar {
   font-size: 12px;
   font-family: sans-serif;
-  position: absolute;
-  width: 200px;
-  padding: 10px 10px 0px 10px;
-  top: 100px;
-  left: 20px;
-  background-color: rgba(247, 232, 244, 0.9);
+  position: fixed;
+  width: 100%;
+  padding: 10px;
+  top: 0;
+  height: 100px;
+  background-color: rgba(0, 0, 255, 0.75);
   color: black;
   z-index: 99999 !important;
-  border-radius: 5px;
-  border: 1px solid gray;
+
 }
 
 #allMsgs div p {
