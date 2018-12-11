@@ -7,7 +7,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/elementFromPoint
 
 // GLOBAL VARIABLES
-
+let luxLevel = null;
 
 window.addEventListener('load', function() {
 
@@ -26,53 +26,60 @@ window.addEventListener('load', function() {
   // https://blog.arnellebalane.com/using-the-ambient-light-sensor-api-to-add-brightness-sensitive-dark-mode-to-my-website-82223e754630
   //may need to enable "Generic Sensor Extra Classes" under chrome flags
   //if light sensor is available
-  if ('AmbientLightSensor' in window) {
-    const sensor = new AmbientLightSensor();
-    //when the reading changes
-    sensor.onreading = () => {
-      let luxLevel = sensor.illuminance;
-      console.log('Current light level:', luxLevel);
-      //change background & text color based on light reading
-      if (luxLevel <= 35) {
-        let bgDarkness = mapRange(luxLevel, 0, 35, 35, 255);
-        //it's dark
-        document.body.style.backgroundColor = "rgb(" + bgDarkness + "," + bgDarkness + "," + bgDarkness + ")";
-        if (luxLevel <= 20 && bgDarkness < 110) {
-          let textColor = 255 - bgDarkness;
-          document.body.style.color = "rgb(" + textColor + "," + textColor + "," + textColor + ")";
+  function lightSensor() {
+    if ('AmbientLightSensor' in window) {
+      const sensor = new AmbientLightSensor();
+      //when the reading changes
+      sensor.onreading = () => {
+        luxLevel = sensor.illuminance;
+        console.log('Current light level:', luxLevel);
+        //change background & text color based on light reading
+        if (luxLevel <= 35) {
+          let bgDarkness = mapRange(luxLevel, 0, 35, 0, 255);
+          let scaleFactor = mapRange(luxLevel, 0, 40, 0.25, 1);
+          console.log(scaleFactor);
+          //it's dark
+          // document.body.style.color = "rgb(" + bgDarkness + "," + bgDarkness + "," + bgDarkness + ")";
+          document.body.style.opacity = scaleFactor;
+
+          // if (luxLevel <= 20 && bgDarkness < 110) {
+          //   let textColor = 255 - bgDarkness;
+          //   document.body.style.color = "rgb(" + textColor + "," + textColor + "," + textColor + ")";
+          // } else {
+          //   //medium dark
+          //   document.body.style.color = "black";
+          // }
         } else {
-          //medium dark
+          //bright light
+          document.body.style.backgroundColor = "white";
           document.body.style.color = "black";
         }
-      } else {
-        //bright light
-        document.body.style.backgroundColor = "white";
-        document.body.style.color = "black";
-      }
-    };
-    sensor.onerror = (event) => {
-      console.log(event.error.name, event.error.message);
-    };
-    sensor.start();
+      };
+      sensor.onerror = (event) => {
+        console.log(event.error.name, event.error.message);
+      };
+      sensor.start();
+    }
   }
-
 
   //get all text nodes in the webpage
   var textnodes = textNodesUnder(document.body);
-  console.log(textnodes);
+  // console.log(textnodes);
   for (let i = 0; i < textnodes.length; i++) {
     //new element for each node
     let newNode = document.createElement('charGroup');
     newNode.innerHTML = textToParticle(textnodes[i].nodeValue);
     textnodes[i].parentNode.replaceChild(newNode, textnodes[i]);
     if (i == textnodes.length - 1) {
-      changeLetters();
+      allWords = document.getElementsByTagName('word');
+      animateLetters();
+      lightSensor();
       console.log('done');
     }
   }
 
   //modify css of elements
-  function changeLetters() {
+  function animateLetters() {
     document.addEventListener('mousemove', function(e) {
       //get all elements that collides with mouse
       let activeItems = document.elementsFromPoint(e.clientX, e.clientY);
@@ -98,11 +105,9 @@ window.addEventListener('load', function() {
           duration: 1200,
           easing: "ease-out",
         });
-
       }
     });
   }
-
 
   //modified from the "explosifyText" function from FontBomb: https://github.com/plehoux/fontBomb/blob/master/js/explosion.js
   //breaks text characters into indvidual elements
