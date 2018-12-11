@@ -7,16 +7,17 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/elementFromPoint
 
 // GLOBAL VARIABLES
-let luxLevel = null;
 let peerInfo = {
   myPeerId: null,
   peerIdToCall: null
 };
+let peer = null;
+let connection = null;
+let clientConnection = null;
 
 
 window.addEventListener('load', function() {
-  let peer = null;
-  let connection = null;
+
 
   //divs
   let myIdDiv = document.getElementById("myIdDiv");
@@ -57,7 +58,7 @@ window.addEventListener('load', function() {
     textnodes[i].parentNode.replaceChild(newNode, textnodes[i]);
     if (i == textnodes.length - 1) {
       allWords = document.getElementsByTagName('word');
-      animateLetters();
+      // animateLetters();
       lightSensor();
       console.log('done converting elements');
     }
@@ -85,7 +86,7 @@ window.addEventListener('load', function() {
 
       connection.on('open', function() {
 
-        //get & send mouse data
+        //send mouse data
         document.body.addEventListener('mousemove', function(e) {
           connection.send({
             x: e.clientX,
@@ -96,76 +97,111 @@ window.addEventListener('load', function() {
 
       connection.on('data', function(data) {
         //DO STUFF WITH DATA BEING RECEIVED
-        if (data.otherUser){
+        if (data.otherUser) {
           console.log('connected to ' + data.otherUser);
         }
 
-        if (data.x && data.y){
-          console.log(data.x, data.y);
+        if (data.x && data.y) {
+          // console.log(data.x, data.y);
+          animateLetters(data.x, data.y);
+        }
+
+        if (data.lux) {
+          console.log(data.lux);
+          if (data.lux <= 35) {
+            let scaleFactor = mapRange(data.lux, 0, 40, 0.3, 1);
+            console.log(scaleFactor);
+            //it's dark --> change text opacity
+            for (i = 0; i < allWords.length; i++) {
+              allWords[i].style.opacity = scaleFactor;
+            }
+          } else {
+            //bright light
+            document.body.style.opacity = 1;
+          }
         }
 
 
-        //document.getElementById('chatlog').innerHTML += data;
-        // document.getElementById('othermouse').style.position = "absolute";
-        // document.getElementById('othermouse').style.left = data.x + "px";
-        // document.getElementById('othermouse').style.top = data.y + "px";
+
       });
 
     });
   };
 
   let makeCall = function() {
-    connection = peer.connect(peerInfo.peerIdToCall);
+    clientConnection = peer.connect(peerInfo.peerIdToCall);
 
-    connection.on('open', function(data) {
+    clientConnection.on('open', function(data) {
       console.log('connection established with ' + peerInfo.peerIdToCall);
-      connection.send({
+      //let other user know who they are talking to
+      clientConnection.send({
         otherUser: peerInfo.myPeerID
       })
 
+      //send mouse data
       document.body.addEventListener('mousemove', function(e) {
-        connection.send({x: e.clientX, y: e.clientY});
+        clientConnection.send({
+          x: e.clientX,
+          y: e.clientY
+        });
       })
     });
 
-    connection.on('data', function(data) {
-      console.log(data.x, data.y);
-      //document.getElementById('chatlog').innerHTML += data;
-      // document.getElementById('othermouse').style.position = "absolute";
-      // document.getElementById('othermouse').style.left = data.x + "px";
-      // document.getElementById('othermouse').style.top = data.y + "px";
+    clientConnection.on('data', function(data) {
+      //DO STUFF WITH DATA BEING RECEIVED
+      if (data.x && data.y) {
+        // console.log(data.x, data.y);
+        animateLetters(data.x, data.y);
+      }
+
+
+      if (data.lux) {
+        console.log(data.lux);
+        if (data.lux <= 35) {
+          let scaleFactor = mapRange(data.lux, 0, 40, 0.3, 1);
+          console.log(scaleFactor);
+          //it's dark --> change text opacity
+          for (i = 0; i < allWords.length; i++) {
+            allWords[i].style.opacity = scaleFactor;
+          }
+        } else {
+          //bright light
+          document.body.style.opacity = 1;
+        }
+      }
+
     });
   };
 
   //modify css of elements
-  function animateLetters() {
-    document.addEventListener('mousemove', function(e) {
-      //get all elements that collides with mouse
-      let activeItems = document.elementsFromPoint(e.clientX, e.clientY);
-      //only get the element that is a "character" element
-      let letter = activeItems.find(letter => letter.localName == "character");
-      if (letter) {
-        let posData = letter.getBoundingClientRect();
-        let dx = (e.x - posData.x) * 1.25;
-        let dy = -(e.y - posData.y) * 1.25;
+  function animateLetters(mouseX, mouseY) {
 
-        // letter.style.transform = "translate(" + dx + "px," + dy + "px)";
-        //https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
-        letter.animate([{
-            transform: "translate(0px, 0px)"
-          },
-          {
-            transform: "translate(" + dx + "px," + dy + "px )"
-          },
-          {
-            transform: "translate(0px, 0px)"
-          }
-        ], {
-          duration: 1200,
-          easing: "ease-out",
-        });
-      }
-    });
+    //get all elements that collides with mouse
+    let activeItems = document.elementsFromPoint(mouseX, mouseY);
+    //only get the element that is a "character" element
+    let letter = activeItems.find(letter => letter.localName == "character");
+    if (letter) {
+      let posData = letter.getBoundingClientRect();
+      let dx = (mouseX - posData.x) * 1.25;
+      let dy = -(mouseY - posData.y) * 1.25;
+
+      // letter.style.transform = "translate(" + dx + "px," + dy + "px)";
+      //https://developer.mozilla.org/en-US/docs/Web/API/Element/animate
+      letter.animate([{
+          transform: "translate(0px, 0px)"
+        },
+        {
+          transform: "translate(" + dx + "px," + dy + "px )"
+        },
+        {
+          transform: "translate(0px, 0px)"
+        }
+      ], {
+        duration: 1200,
+        easing: "ease-out",
+      });
+    }
+
   }
 
   //modified from the "explosifyText" function from FontBomb: https://github.com/plehoux/fontBomb/blob/master/js/explosion.js
@@ -228,21 +264,34 @@ window.addEventListener('load', function() {
       const sensor = new AmbientLightSensor();
       //when the reading changes
       sensor.onreading = () => {
-        luxLevel = sensor.illuminance;
+        let luxLevel = sensor.illuminance;
+        if (connection) {
+          connection.send({
+            lux: luxLevel
+          })
+        }
+        if (clientConnection) {
+          clientConnection.send({
+            lux: luxLevel
+          })
+        }
         // console.log('Current light level:', luxLevel);
         //change text opacity based on light reading
-        if (luxLevel <= 35) {
-          let scaleFactor = mapRange(luxLevel, 0, 40, 0.3, 1);
-          // console.log(scaleFactor);
-          //it's dark --> change text opacity
-          for (i = 0; i < allWords.length; i++) {
-            allWords[i].style.opacity = scaleFactor;
-          }
-        } else {
-          //bright light
-          document.body.style.opacity = 1;
-          // document.body.style.color = "black";
-        }
+        // if (luxLevel <= 35) {
+        //   let scaleFactor = mapRange(luxLevel, 0, 40, 0.3, 1);
+        //   // console.log(scaleFactor);
+        //   //it's dark --> change text opacity
+        //   for (i = 0; i < allWords.length; i++) {
+        //     allWords[i].style.opacity = scaleFactor;
+        //   }
+        // } else {
+        //   //bright light
+        //   document.body.style.opacity = 1;
+        //   // document.body.style.color = "black";
+        // }
+
+
+
       };
       sensor.onerror = (event) => {
         console.log(event.error.name, event.error.message);
